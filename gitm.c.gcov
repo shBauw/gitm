@@ -1,0 +1,277 @@
+        -:    0:Source:gitm.c
+        -:    0:Graph:gitm.gcno
+        -:    0:Data:gitm.gcda
+        -:    0:Runs:5
+        -:    0:Programs:1
+        -:    1:// name: Ali Haider Kachwalla
+        -:    2:// unikey: akac6194
+        -:    3:// SID: 520446193
+        -:    4:
+        -:    5:// Code starts here: Necessary libraries
+        -:    6:#include <stdio.h>
+        -:    7:#include <string.h>
+        -:    8:#include <stdlib.h>
+        -:    9:#include <ctype.h>
+        -:   10:
+        -:   11:// Recursive check functions moving in each direction, returning total in a row
+      812:   12:int checkUp(char board[19][19], int x, int y, char user) {
+      812:   13:    if (x < 0 || x > 18 || y < 0 || y > 18) return 0;
+        -:   14:    else {
+      778:   15:        if (board[x][y] == user) {
+      414:   16:            return 1 + checkUp(board, x, y-1, user);
+      364:   17:        } else return 0;
+        -:   18:    }
+      812:   19:}
+      800:   20:int checkDown(char board[19][19], int x, int y, char user) {
+      800:   21:    if (x < 0 || x > 18 || y < 0 || y > 18) return 0;
+        -:   22:    else {
+      781:   23:        if (board[x][y] == user) {
+      402:   24:            return 1 + checkDown(board, x, y+1, user);
+      379:   25:        } else return 0;
+        -:   26:    }
+      800:   27:}
+      992:   28:int checkLeft(char board[19][19], int x, int y, char user) {
+      992:   29:    if (x < 0 || x > 18 || y < 0 || y > 18) return 0;
+        -:   30:    else {
+      951:   31:        if (board[x][y] == user) {
+      594:   32:            return 1 + checkLeft(board, x-1, y, user);
+      357:   33:        } else return 0;
+        -:   34:    }
+      992:   35:}
+      800:   36:int checkRight(char board[19][19], int x, int y, char user) {
+      800:   37:    if (x < 0 || x > 18 || y < 0 || y > 18) return 0;
+        -:   38:    else {
+      777:   39:        if (board[x][y] == user) {
+      402:   40:            return 1 + checkRight(board, x+1, y, user);
+      375:   41:        } else return 0;
+        -:   42:    }
+      800:   43:}
+      961:   44:int checkLeftUp(char board[19][19], int x, int y, char user) {
+      961:   45:    if (x < 0 || x > 18 || y < 0 || y > 18) return 0;
+        -:   46:    else {
+      880:   47:        if (board[x][y] == user) {
+      565:   48:            return 1 + checkLeftUp(board, x-1, y-1, user);
+      315:   49:        } else return 0;
+        -:   50:    }
+      961:   51:}
+      961:   52:int checkLeftDown(char board[19][19], int x, int y, char user) {
+      961:   53:    if (x < 0 || x > 18 || y < 0 || y > 18) return 0;
+        -:   54:    else {
+      885:   55:        if (board[x][y] == user) {
+      565:   56:            return 1 + checkLeftDown(board, x-1, y+1, user);
+      320:   57:        } else return 0;
+        -:   58:    }
+      961:   59:}
+      793:   60:int checkRightUp(char board[19][19], int x, int y, char user) {
+      793:   61:    if (x < 0 || x > 18 || y < 0 || y > 18) return 0;
+        -:   62:    else {
+      741:   63:        if (board[x][y] == user) {
+      397:   64:            return 1 + checkRightUp(board, x+1, y-1, user);
+      344:   65:        } else return 0;
+        -:   66:    }
+      793:   67:}
+      795:   68:int checkRightDown(char board[19][19], int x, int y, char user) {
+      795:   69:    if (x < 0 || x > 18 || y < 0 || y > 18) return 0;
+        -:   70:    else {
+      754:   71:        if (board[x][y] == user) {
+      399:   72:            return 1 + checkRightDown(board, x+1, y+1, user);
+      355:   73:        } else return 0;
+        -:   74:    }
+      795:   75:}
+        -:   76:
+        -:   77:// Function to implement recursive checks
+      398:   78:int check(char board[19][19], int x, int y) {
+        -:   79:    // Set initial char to make life easier
+      398:   80:    char user = board[x][y];
+        -:   81:    // Checks for > 5 due to initial stone being counted twice
+      794:   82:    if (checkUp(board, x, y, user) + checkDown(board, x, y, user) > 5 ||
+      398:   83:        checkLeft(board, x, y, user) + checkRight(board, x, y, user) > 5 ||
+      396:   84:        checkLeftUp(board, x, y, user) + checkRightDown(board, x, y, user) > 5 ||
+      396:   85:        checkRightUp(board, x, y, user) + checkLeftDown(board, x, y, user) > 5) {
+        -:   86:            // Using initial char: decide who wins
+        2:   87:            if (user == '#') printf("Black wins!\n");
+        1:   88:            else printf("White wins!\n");
+        -:   89:
+        2:   90:            return 0;
+        -:   91:        }
+        -:   92:
+        -:   93:    // Check for a full board by making check negative if empty space is found
+      396:   94:    int full = 0;
+     4059:   95:    for (int i = 0; i < 19; i++) {
+     4039:   96:        if (full) break;
+    69375:   97:        for (int j = 0; j < 19; j++) {
+    66088:   98:            if (full) break;
+    65712:   99:            if (board[i][j] == '.') {
+      395:  100:                full = 1;
+      395:  101:            }
+    65712:  102:        }
+     3663:  103:    }
+        -:  104:
+        -:  105:    // Printing from full flag if empty space not found
+      396:  106:    if (full == 0) {
+        1:  107:        printf("Wow, a tie!\n");
+        1:  108:        return 0;
+        -:  109:    } 
+        -:  110:
+      395:  111:    return 1;
+      398:  112:}
+        -:  113:
+        -:  114:// Displays previous moves in order
+        4:  115:int history(char moves[]) {
+      385:  116:    for (int i = 0; i < 722; i++) {
+        -:  117:        // End print if moves[i] is empty
+      384:  118:        if (moves[i] != '.') {
+      381:  119:            printf("%c", moves[i++]);
+        -:  120:            // All moves stored as chars so reconverting before printing
+      381:  121:            printf("%d", (int) moves[i]);
+      384:  122:        } else break;
+      381:  123:    }
+        4:  124:    printf("\n");
+        -:  125:
+        4:  126:    return 1;
+        -:  127:}
+        -:  128:
+        5:  129:int main() {
+        -:  130:    // Setting up initial variables
+        -:  131:    // Turn counter
+        5:  132:    int turn = 0;
+        -:  133:    // Initial mist pos
+        5:  134:    int xMist = 9;
+        5:  135:    int yMist = 9;
+        -:  136:    // Board + filling with empty spaces
+        -:  137:    char board[19][19];
+      100:  138:    for (int i = 0; i < 19; i++) {
+     1900:  139:        for (int j = 0; j < 19; j++) {
+     1805:  140:            board[i][j] = '.';
+     1805:  141:        }
+       95:  142:    }
+        -:  143:    // Moves + filling with empty spaces
+        -:  144:    char moves[772];
+     1285:  145:    for (int i = 0; i < 256; i++) {
+     1280:  146:        moves[i] = '.';
+     1280:  147:    }
+        -:  148:
+      410:  149:    while (1) {
+        -:  150:        // Continuously get new inputs until while loop exited
+        -:  151:        char cmd[2000];
+      416:  152:        fgets(cmd, 2000, stdin);
+        -:  153: 
+        -:  154:        // Check for which command entered
+      416:  155:        if (strcmp(cmd, "term\n") == 0) {
+        -:  156:            // Exit program with no other output
+        2:  157:            return 1;
+      414:  158:        } else if (strcmp(cmd, "resign\n") == 0) {
+        -:  159:            // Whoever's turn it is, the other wins
+    #####:  160:            if (turn % 2 == 1) {
+    #####:  161:                printf("Black wins!\n");
+    #####:  162:            } else {
+    #####:  163:                printf("White wins!\n");
+        -:  164:            }
+    #####:  165:            break;
+      414:  166:        } else if (strcmp(cmd, "who\n") == 0) {
+        -:  167:            // Who's turn is it?
+        2:  168:            if (turn % 2 == 0) {
+        1:  169:                printf("B\n");
+        1:  170:            } else {
+        1:  171:                printf("W\n");
+        -:  172:            }
+        -:  173:        // Only did an exact mask for initial processing, later on further comparison
+      414:  174:        } else if (strncmp(cmd, "place ", strlen("place ")) == 0) {
+        -:  175:            // Check for number of spaces
+      404:  176:            int spaces = 0;
+     4243:  177:            for (int i = 0; i < strlen(cmd); i++) {
+     3839:  178:                if (cmd[i] == ' ') spaces += 1;
+     3839:  179:            }   
+      404:  180:            if (spaces != 1) {
+        1:  181:                printf("Invalid!\n");
+        1:  182:                continue;
+        -:  183:            }
+        -:  184:
+        -:  185:            // Tracking locations, set to 99 initially to trigger error if unchanged
+      403:  186:            int X = 99;
+      403:  187:            int Y = 99;
+        -:  188:
+        -:  189:            // Checking if first part of coordinate is a letter
+      403:  190:            if (isalpha(cmd[6]) == 0) {
+        1:  191:                printf("Invalid!\n");
+        1:  192:                continue;
+        -:  193:            } else {
+        -:  194:                // Storing numerical equivalent
+      402:  195:                X = (int) cmd[6] - 65;
+        -:  196:            }
+        -:  197:
+        -:  198:            // Checking first digit of second coordinate
+      402:  199:            if (cmd[7] > '0' && cmd[7] <= '9') {
+        -:  200:                // If 1 digit
+      402:  201:                if (cmd[8] == '\n') {
+      202:  202:                    Y = atoi(&cmd[7]) - 1;
+        -:  203:                // If 2 digits
+      402:  204:                } else if (cmd[8] >= '0' && cmd[8] <= '9') {
+      200:  205:                    if (cmd[9] == '\n') {
+      199:  206:                        Y = atoi(&cmd[7]) - 1;
+      199:  207:                    }
+      200:  208:                }
+      402:  209:            }
+        -:  210:
+        -:  211:            // If coordinates are off board (can't be less than 0 due to enforced minimums)
+      402:  212:            if (X > 18 || Y > 18) {
+        3:  213:                printf("Invalid coordinate\n");
+        3:  214:                continue;
+        -:  215:            }
+        -:  216:            
+        -:  217:            // If position is empty
+      399:  218:            if (board[X][Y] == '.') {
+      398:  219:                if (turn % 2 == 0) {
+      201:  220:                    board[X][Y] = '#';
+      201:  221:                } else {
+      197:  222:                    board[X][Y] = 'o';
+        -:  223:                }
+        -:  224:
+        -:  225:                // New mist centre location
+      398:  226:                xMist = (5*(X+1)*(X+1) + 3*(X+1) + 4)%19;
+      398:  227:                yMist = (4*(Y+1)*(Y+1) + 2*(Y+1) - 4)%19;
+        -:  228:
+        -:  229:                // Record stone being placed in moves
+      398:  230:                moves[turn*2] = (char) X + 65;
+      398:  231:                moves[turn*2 + 1] = (char) Y + 1;
+        -:  232:
+        -:  233:                // Check if game ends
+      398:  234:                if (check(board, X, Y) == 0) break;
+        -:  235:            // If position not empty
+      395:  236:            } else {
+        1:  237:                printf("Occupied coordinate\n");
+        1:  238:                continue;
+        -:  239:            }
+        -:  240:
+        -:  241:            // Increment turn if all goes well
+      395:  242:            turn += 1;
+      403:  243:        } else if (strcmp(cmd, "view\n") == 0) {
+        -:  244:            // Finding start and end points for pring
+        6:  245:            int xStart = xMist - 3;
+        6:  246:            int xEnd = xMist + 3;
+        6:  247:            int yStart = yMist - 3;
+        6:  248:            int yEnd = yMist + 3;
+        -:  249:            
+        -:  250:            // Print centre of mist
+        6:  251:            printf("%c%d,", (char) (xMist + 65), (yMist + 1));
+        -:  252:            // Print pieces in mist
+       48:  253:            for (int i = yEnd; i >= yStart; i = i - 1) {
+      336:  254:                for (int j = xStart; j <= xEnd; j++) {
+      294:  255:                    if (i < 0 || i > 18) printf("x");
+      266:  256:                    else if (j < 0 || j > 18) printf("x");
+      261:  257:                    else printf("%c", board[j][i]);
+      294:  258:                }
+       42:  259:            }
+        6:  260:            printf("\n");
+        8:  261:        } else if (strcmp(cmd, "history\n") == 0) {
+        1:  262:            history(moves);
+        -:  263:        // No match to valid commands
+        1:  264:        } else {
+        1:  265:            printf("Invalid!\n");
+        -:  266:        }
+        -:  267:    }
+        -:  268:    // Sequence when game ends
+        3:  269:    history(moves);
+        3:  270:    printf("Thank you for playing!\n");
+        3:  271:    return 0;
+        5:  272:}
